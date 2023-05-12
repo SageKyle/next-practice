@@ -1,10 +1,11 @@
 import Head from 'next/head';
 // import Image from 'next/image';
 import Link from 'next/link';
+import Navbar from '../../components/navbar';
 import { baseUrl } from '../../lib/data';
 
 export async function getStaticPaths() {
-	const json = await fetch(`${baseUrl}`);
+	const json = await fetch(`${baseUrl}?limit=100`);
 	const data = await json.json();
 	const paths = data.products.map((item) => {
 		return {
@@ -61,10 +62,7 @@ export default function product({ product, error }) {
 					</Head>
 
 					<article className="p-6 w-4/5 mx-auto ">
-						<nav className="flex mb-4 capitalize underline decoration-cyan-500 space-x-2">
-							<Link href="/">Home</Link>
-							<Link href="/products">products</Link>
-						</nav>
+						<Navbar />
 						{/* <Image
 					width={50}
 					height={50}
@@ -77,7 +75,7 @@ export default function product({ product, error }) {
 						<section className="grid grid-cols-2 gap-4 my-4">
 							{product.images.map((img) => (
 								<img
-									className="w-full h-full bg-cyan-600 p-4 object-fill rounded-md"
+									className="w-full h-full bg-cyan-600 p-2 md:p-4 object-fill rounded-md"
 									key={img}
 									// width={150}
 									// height={150}
