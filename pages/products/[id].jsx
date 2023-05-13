@@ -1,17 +1,20 @@
 import Head from 'next/head';
-// import Image from 'next/image';
-import Link from 'next/link';
 import Navbar from '../../components/navbar';
 import { baseUrl } from '../../lib/data';
 
 export async function getStaticPaths() {
-	const json = await fetch(`${baseUrl}?limit=100`);
-	const data = await json.json();
-	const paths = data.products.map((item) => {
-		return {
-			params: { id: `${item.id}` },
-		};
-	});
+	let paths;
+	try {
+		const json = await fetch(`${baseUrl}?limit=100`);
+		const data = await json.json();
+		paths = data.products.map((item) => {
+			return {
+				params: { id: `${item.id}` },
+			};
+		});
+	} catch (err) {
+		paths = [];
+	}
 
 	// const paths = getPath();
 
@@ -34,8 +37,6 @@ export async function getStaticProps({ params }) {
 		error = err.message;
 	}
 
-	// const data = fetchProduct(params.id);
-
 	return {
 		props: {
 			product: data,
@@ -47,9 +48,16 @@ export async function getStaticProps({ params }) {
 export default function product({ product, error }) {
 	return (
 		<>
-			{error && <h4>{error}</h4>}
+			{error && (
+				<main className="m-4">
+					<h4 className="font-bold">{error}.</h4>
+					<p className="mt-2">
+						Check your internet connection and try refreshing the page.
+					</p>
+				</main>
+			)}
 
-			{!error && (
+			{!error && product && (
 				<>
 					<Head>
 						<title>{product.title}</title>
@@ -61,15 +69,9 @@ export default function product({ product, error }) {
 						/>
 					</Head>
 
-					<article className="p-6 w-4/5 mx-auto ">
+					<main className="p-6 w-4/5 mx-auto ">
 						<Navbar />
-						{/* <Image
-					width={50}
-					height={50}
-					priority
-					alt={product.title}
-					src={product.thumbnail}
-				/> */}
+
 						<h1>{product.title}</h1>
 						<small>{product.description}</small>
 						<section className="grid grid-cols-2 gap-4 my-4">
@@ -77,14 +79,12 @@ export default function product({ product, error }) {
 								<img
 									className="w-full h-full bg-cyan-600 p-2 md:p-4 object-fill rounded-md"
 									key={img}
-									// width={150}
-									// height={150}
 									alt={product.title}
 									src={img}
 								/>
 							))}
 						</section>
-					</article>
+					</main>
 				</>
 			)}
 		</>

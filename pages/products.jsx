@@ -25,14 +25,14 @@ export async function getStaticProps() {
 
 	return {
 		props: {
-			result: data.products,
+			result: data,
 			error,
 		},
 	};
 }
 
 export default function products({ result, error }) {
-	const { data, setParams, isPending } = useSearch(baseUrl);
+	const { data: searchResult, setParams, isPending } = useSearch(baseUrl);
 	const [search, setSearch] = useState('');
 
 	function getSearch(e) {
@@ -70,8 +70,10 @@ export default function products({ result, error }) {
 					</button>
 				</form>
 				{isPending && <h4 className="my-6 font-bold">Loading...</h4>}
-				{data && <Products products={data} error={error} />}
-				{!data && <Products products={result} error={error} />}
+				{searchResult && (
+					<Products products={searchResult.products} error={error} />
+				)}
+				{!searchResult && <Products products={result.products} error={error} />}
 			</main>
 		</>
 	);

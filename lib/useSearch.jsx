@@ -6,13 +6,6 @@ export default function useSearch(baseUrl) {
 	const [data, setData] = useState(null);
 	const [params, setParams] = useState('');
 
-	async function fetchData(url) {
-		const json = await fetch(url);
-		const data = await json.json();
-
-		return data;
-	}
-
 	useEffect(() => {
 		if (params.length < 3) setData(null);
 
@@ -20,8 +13,13 @@ export default function useSearch(baseUrl) {
 			setIsPending(true);
 			fetch(`${baseUrl}/search?q=${params}`)
 				.then((res) => res.json())
+				.catch((err) => {
+					console.log(err.message);
+					setData([]);
+					setIsPending(false);
+				})
 				.then((data) => {
-					setData(data.products);
+					setData(data);
 					setIsPending(false);
 				});
 		}
