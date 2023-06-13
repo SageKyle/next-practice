@@ -19,6 +19,9 @@ export default function Home() {
 			<Link href="/products">View Products</Link>
 			<br />
 			<Link href="/more-content">Read more...</Link>
+			<br />
+			<br />
+			<Link href="/calendar">Calendar</Link>
 		</div>
 	);
 }
