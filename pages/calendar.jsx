@@ -9,13 +9,21 @@ import 'react-calendar/dist/Calendar.css';
 import AddEvent from '../components/AddEvent';
 
 export default function CalendarFn() {
-	const [value, onChange] = useState(new Date());
-	const [open, setOpen] = useState(true);
+	const [value, setDate] = useState(new Date());
+	const [open, setOpen] = useState(false);
+	const [formData, setFormData] = useState(null);
+	const [defaultDay, setDefaultDay] = useState(new Date());
 
 	function onClickDay(value, event) {
 		// alert('you clicked on: ', value);
+		setOpen(true);
+		setDefaultDay(value);
 		console.log(value);
 		console.log(event);
+	}
+
+	function handleClose() {
+		setOpen(false);
 	}
 
 	return (
@@ -23,22 +31,45 @@ export default function CalendarFn() {
 			<Head>
 				<title>Calendar</title>
 			</Head>
-			<main className="w-full py-8 flex flex-col justify-center items-center space-y-4">
-				<h1 className="text-2xl">This is the Calendar Page</h1>
-				<section>
+			<main className="w-full py-8 flex flex-col justify-center items-center relative">
+				<h1 className="text-2xl mb-4">This is the Calendar Page</h1>
+				<section className="my-4">
 					<Calendar
+						tileClassName="bg-slate-200"
+						// selectRange
 						value={value}
-						onChange={onChange}
+						onChange={setDate}
+						tileContent={({ date, view }) =>
+							view === 'month' && date === new Date(formData?.date) ? (
+								<p>Hey!</p>
+							) : null
+						}
 						onClickDay={(value, event) => onClickDay(value, event)}
 					/>
 				</section>
 				<div
-					className="bg-slate-500 rounded-full p-2 w-12 cursor-pointer aspect-square text-3xl inline-block relative z-30 bottom-16 right-[-6rem]"
-					onClick={(prev) => setOpen(!prev)}
+					className="relative bg-slate-100 flex items-center justify-center right-[-7rem] bottom-14 z-10 border-2 hover:bg-slate-200 transition-colors ease-in-out w-10 cursor-pointer rounded-full text-3xl"
+					onClick={() => setOpen(true)}
 				>
-					&rArr;
+					+
 				</div>
-				{open && <AddEvent />}
+				{open && (
+					<div className="absolute inset-0 flex items-center justify-center z-40">
+						<AddEvent
+							handleClose={handleClose}
+							defaultDate={defaultDay}
+							setFormData={setFormData}
+						/>
+					</div>
+				)}
+				{formData && (
+					<>
+						<h3 className="capitalize font-semibold">{formData?.title}</h3>
+						<pre>{formData?.desc}</pre>
+						<small>{new Date(formData?.date).toDateString()}</small>
+						{/* <small>{da}</small> */}
+					</>
+				)}
 				<Link href={'/'} className="inline-block mt-auto">
 					Home
 				</Link>
