@@ -5,13 +5,18 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import styles from '../app/styles/calendar.module.css';
 
 import AddEvent from '../components/AddEvent';
 
 export default function CalendarFn() {
 	const [value, setDate] = useState(new Date());
 	const [open, setOpen] = useState(false);
-	const [formData, setFormData] = useState(null);
+	const [formData, setFormData] = useState({
+		title: '',
+		desc: '',
+		date: new Date(),
+	});
 	const [defaultDay, setDefaultDay] = useState(new Date());
 
 	function onClickDay(value, event) {
@@ -35,13 +40,16 @@ export default function CalendarFn() {
 				<h1 className="text-2xl mb-4">This is the Calendar Page</h1>
 				<section className="my-4">
 					<Calendar
-						tileClassName="bg-slate-200"
+						className={styles.calendar}
+						tileClassName={styles.tileStyles}
 						// selectRange
 						value={value}
 						onChange={setDate}
 						tileContent={({ date, view }) =>
-							view === 'month' && date === new Date(formData?.date) ? (
-								<p>Hey!</p>
+							view === 'month' &&
+							date.toDateString() ===
+								new Date(formData?.date).toDateString() ? (
+								<p className={styles.EventTile}>Hey!</p>
 							) : null
 						}
 						onClickDay={(value, event) => onClickDay(value, event)}
