@@ -11,6 +11,9 @@
 }
 
 .EventTile {
+	font-size: 1.2rem;
+	font-weight: 300;
+	color: rgb(3, 49, 109);
 	width: 100%;
 	height: 100%;
 	position: absolute;

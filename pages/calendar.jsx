@@ -49,7 +49,11 @@ export default function CalendarFn() {
 							view === 'month' &&
 							date.toDateString() ===
 								new Date(formData?.date).toDateString() ? (
-								<p className={styles.EventTile}>Hey!</p>
+								<p
+									className={`text-sm text-cyan-500 font-light ${styles.EventTile}`}
+								>
+									{formData?.desc.slice(0, 9)}...
+								</p>
 							) : null
 						}
 						onClickDay={(value, event) => onClickDay(value, event)}
